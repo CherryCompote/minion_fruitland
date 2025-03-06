@@ -4,6 +4,26 @@ mission_num = int(input("What is your mission number?"))
 
 print(f"Hi {name}! Your experience level is {experience_level}, and your mission number today is {mission_num}.")
 
+places = ["banana village", "kiwi forest", "pineapple mountain"]
+
+for place in places:
+    print(f"- {place}")
+
+choice = input("Do you want to add more fruitlands?")
+if choice == "yes" :
+    new_place = input("What is it's name? ")
+    places.append(new_place)
+
+choice = input("Do you want to remove any fruitlands?")
+if choice == "yes" :
+    rmv_place = input("Which one? ")
+    places.remove(rmv_place)
+
+
+print("This is the new list:")
+for place in places:
+    print(f"- {place}")
+
 if mission_num > 0 and mission_num <= 25:
     print("This is an easy mission.")
 elif mission_num > 25 and mission_num <= 50:
