@@ -1,3 +1,5 @@
+import random
+
 RED = "\033[0;31m"
 GREEN = "\033[0;32m"
 BROWN = "\033[0;33m"
@@ -14,7 +16,6 @@ LIGHT_PURPLE = "\033[1;35m"
 LIGHT_CYAN = "\033[1;36m"
 LIGHT_WHITE = "\033[1;37m"
 
-
 print(LIGHT_WHITE)
 
 name = input("What is your minion name?")
@@ -24,12 +25,16 @@ failed_mission = False
 
 print(f"Hi {name}! Your experience level is {experience_level}, and your mission number today is {mission_num}.")
 
+var health = 100
+
 supplies = {
     "fartgun": 2,
     "lip_balm": 1,
     "banana": 13,
     "water_bottle": 0
 }
+
+list_of_possible_supplies = ["fartgun", "lip_balm"]
 
 print("Your current supplies are ")
 print(supplies)
@@ -89,6 +94,22 @@ else:
 
 finished_exploring = False
 
+def minus_supply(supplies, item, deduction):
+    if item not in supplies:
+        supplies[item] = 0
+
+    supplies[item] -= deduction
+
+    return supplies
+
+def add_supply(supplies, item, addition):
+    if item not in supplies:
+        supplies[item] = 0
+
+    supplies[item] += addition
+
+    return supplies
+
 while finished_exploring == False:
 
     print(LIGHT_WHITE)
@@ -103,15 +124,9 @@ while finished_exploring == False:
 
         print("Because you came to banana village, your minions took 5 bananas but you lost 3 water bottles due to the bananas being sweet.")
 
-        if "water_bottle" not in supplies:
-            supplies["water_bottle"] = 0
+        supplies = minus_supply(supplies, "water_bottle", 3)
 
-        supplies["water_bottle"] -= 3
-
-        if "banana" not in supplies:
-            supplies["banana"] = 0
-
-        supplies["banana"] += 5
+        supplies = add_supply(supplies, "banana", 5)
 
     elif destination == "kiwi forest":
 
@@ -122,15 +137,9 @@ while finished_exploring == False:
 
         print("Because you came to kiwi forest, you used a pair of gloves for touching the kiwis, but you got 10 kiwis.")
 
-        if "gloves" not in supplies:
-            supplies["gloves"] = 0
+        supplies = minus_supply(supplies, "gloves", 2)
 
-        supplies["gloves"] -= 2
-
-        if "kiwi" not in supplies:
-            supplies["kiwi"] = 0
-
-        supplies["kiwi"] += 10
+        supplies = add_supply(supplies, "kiwi", 10)
 
     elif destination == "watermelon mountain":
 
@@ -142,21 +151,21 @@ while finished_exploring == False:
         print("Because you came to watermelon mountain, you used one sword to fight the monster, but you got 1 watermelon.")
 
         # sword changes
-        if "sword" not in supplies:
-            supplies["sword"] = 0
+        supplies = minus_supply(supplies, "sword", 1)
 
-        supplies["sword"] -= 1
-
-        if "watermelon" in supplies:
-            supplies["watermelon"]+= 1
-        else:
-            supplies["watermelon"] = 1
+        supplies = add_supply(supplies, "watermelon", 1)
 
     else:
+
+        print(DARK_GRAY)
+
         print("Uh oh! This location isn't in our maps, be careful!")
         experience_level += 50
 
+        print("The location you went to had an earthquake and you lost an unknown amount of supplies.")
+
         # TODO: add supply changes
+        supplies = minus_supply(supplies, random.choice(list_of_possible_supplies), random.randint(1, 20))
 
 
     print(LIGHT_WHITE)
