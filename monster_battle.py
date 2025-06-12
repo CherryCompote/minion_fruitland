@@ -1,10 +1,12 @@
-print("Welcome to monster battle! In this game, you try to defeat different monsters with different warriors!")
+import random
+
+print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
 list_of_warriors = [
     {
     "name": "Gru",
     "full_name": "Gru",
-    "hp": 100, #Hit points
+    "hp": 100, #Health points
     "attacks": [
         {
             "name": "fart gun",
@@ -23,7 +25,7 @@ list_of_warriors = [
     {
     "name": "Bob",
     "full_name": "Bob the Minion",
-    "hp": 90, #Hit points
+    "hp": 90, #Health points
     "attacks": [
         {
             "name": "laser gun",
@@ -42,7 +44,7 @@ list_of_warriors = [
     {
     "name": "George",
     "full_name": "George Lo",
-    "hp": 110, #Hit points
+    "hp": 110, #Health points
     "attacks": [
         {
             "name": "Metal backpack",
@@ -61,7 +63,7 @@ list_of_warriors = [
 ]
 
 selected_character = False
-user_character = ""
+user_character = {}
 
 while not selected_character: #also can type: while selected_character == False:
     print("Select your character! Type the character to see the details.")
@@ -95,9 +97,37 @@ while not selected_character: #also can type: while selected_character == False:
 
 print(f"Great! You have selected {character_details["name"]}!")
         
+selected_opponent = False
+opponent_character = {}
+
+while not selected_opponent:
+    opponent_character = random.choice(list_of_warriors)
+    if opponent_character["name"] != user_character["name"]:
+        selected_opponent = True
+
+print(f"Your challenger is {opponent_character["name"]}. Get ready to fight!")
+print("============================")
+print(f"Beginning battle between {user_character["name"]} and {opponent_character["name"]}!")
+
+turns = 0
+
+while user_character["hp"] > 0 and opponent_character["hp"] > 0:
+    turns += 1
+    print(f"This is turn number #{turns}")
+    print("Which attack do you want to use?")
+    for index, attack in enumerate(user_character["attacks"]):
+        print(f"{index+1}. {attack["name"].upper()}")
+        print(f"- Attack power: {attack["ap"]}")
+        print(f"- Remaining usage: {attack["pp"]}")
+        print(f"- Accuracy: {attack["accuracy"]}")
+    
+    attack_choice = int(input(""))
 
 
 
+
+
+    
 # TODO Next Week:
 # Random pick opponent
 # also add speed to determine who moves first
