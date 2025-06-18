@@ -6,6 +6,7 @@ list_of_warriors = [
     {
     "name": "Gru",
     "full_name": "Gru",
+    "speed": 70,
     "hp": 100, #Health points
     "attacks": [
         {
@@ -25,6 +26,7 @@ list_of_warriors = [
     {
     "name": "Bob",
     "full_name": "Bob the Minion",
+    "speed": 90,
     "hp": 90, #Health points
     "attacks": [
         {
@@ -42,8 +44,29 @@ list_of_warriors = [
     ]
     },
     {
+    "name": "Mario",
+    "full_name": "Mario",
+    "speed": 85,
+    "hp": 100, #Health points
+    "attacks": [
+        {
+            "name": "fireball",
+            "ap": 10, #Attack power
+            "pp": 10, #How many times the player can use it
+            "accuracy": 90 #how likely it is to hit the enemy
+        },
+        {
+            "name": "up punch",
+            "ap": 15,
+            "pp": 5,
+            "accuracy": 75
+        }
+    ]
+    },
+    {
     "name": "George",
     "full_name": "George Lo",
+    "speed": 80,
     "hp": 110, #Health points
     "attacks": [
         {
@@ -85,6 +108,7 @@ while not selected_character: #also can type: while selected_character == False:
     print("-------------")
     print(f"Name: {character_details["full_name"]}")
     print(f"HP: {character_details["hp"]}")
+    print(f"Speed: {character_details["speed"]}")
     print("Attacks:")
     for attack in character_details["attacks"]:
         print(f"- {attack["name"]}: attack {attack["ap"]} / can use {attack["pp"]} times")
@@ -114,20 +138,74 @@ turns = 0
 while user_character["hp"] > 0 and opponent_character["hp"] > 0:
     turns += 1
     print(f"This is turn number #{turns}")
+    print(f"{user_character["name"]} HP : {user_character["hp"]}")
+    print(f"{opponent_character["name"]} HP : {opponent_character["hp"]}")
+
     print("Which attack do you want to use?")
     for index, attack in enumerate(user_character["attacks"]):
         print(f"{index+1}. {attack["name"].upper()}")
         print(f"- Attack power: {attack["ap"]}")
         print(f"- Remaining usage: {attack["pp"]}")
         print(f"- Accuracy: {attack["accuracy"]}")
-    
-    attack_choice = int(input(""))
+    print("Enter the number")
+    attack_choice = int(input(""))-1
+
+    opponent_number_of_attacks = len(opponent_character["attacks"])
+    opponent_attack_choice = random.randint(0, opponent_number_of_attacks - 1)
+
+    user_attack = user_character["attacks"][attack_choice]
+    opponent_attack = opponent_character["attacks"][opponent_attack_choice]
+    if user_character["speed"] >= opponent_character["speed"]:
+        print("==============")
+        print(" ")
+        print(f"{user_character["name"]} used {user_attack["name"].upper()}!")
+        print(f"{opponent_character["name"]} lost {user_attack["ap"]} HP")
+        print(" ")
+        opponent_character["hp"] -= user_attack["ap"]
+        user_attack["pp"] -= 1
+
+        if opponent_character["hp"] <= 0:
+            break
+
+        print(f"{opponent_character["name"]} used {opponent_attack["name"].upper()}!")
+        print(f"{user_character["name"]} lost {opponent_attack["ap"]} HP")
+        user_character["hp"] -= opponent_attack["ap"]
+        opponent_attack["pp"] -= 1
+        print(" ")
+        print(" ")
+        print("=============")
+
+        if user_character["hp"] <= 0:
+            break
+    else:
+        print("==============")
+        print(" ")
+        print(f"{opponent_character["name"]} used {opponent_attack["name"].upper()}!")
+        print(f"{user_character["name"]} lost {opponent_attack["ap"]} HP")
+        user_character["hp"] -= opponent_attack["ap"]
+        opponent_attack["pp"] -= 1
+
+        if user_character["hp"] <= 0:
+            break
+        print(f"{user_character["name"]} used {user_attack["name"].upper()}!")
+        print(f"{opponent_character["name"]} lost {user_attack["ap"]} HP")
+        print(" ")
+        opponent_character["hp"] -= user_attack["ap"]
+        user_attack["pp"] -= 1
+        print(" ")
+        print(" ")
+        print("=============")
+        if opponent_character["hp"] <= 0:
+            break
 
 
 
-
+if user_character["hp"] <= 0 :
+    print(f"Uh oh, {user_character["name"]} lost... You can always try again.")
+elif opponent_character["hp"] <= 0 :
+    print(f"Yay, You win! You defeated {opponent_character["name"]}!")
 
     
 # TODO Next Week:
 # Random pick opponent
-# also add speed to determine who moves first
+# also add speed to determine who moves first.
