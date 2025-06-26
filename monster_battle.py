@@ -1,5 +1,17 @@
 import random
 
+
+def space():
+    print(" ")
+
+def line():
+    print("===============================================================")
+
+def space_line():
+    space()
+    line()
+    space()
+
 print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
 list_of_warriors = [
@@ -209,12 +221,15 @@ selected_character = False
 user_character = {}
 
 while not selected_character: #also can type: while selected_character == False:
+    space_line()
     print("Select your character! Type the character to see the details.")
+    space_line()
 
     for warrior in list_of_warriors:
         print(f"- {warrior ["full_name"]}")
+        space()
 
-    character = input("which character would you like to see the details of?")
+    character = input("Which character would you like to see the details of?")
 
     character_details = {}
 
@@ -223,15 +238,15 @@ while not selected_character: #also can type: while selected_character == False:
         # comparing it to lowercase
         if character.lower() == warrior["name"].lower() or character.lower() == warrior["full_name"].lower():
             character_details = warrior
-
+    space()
     print("Here's the character stats:")
-    print("-------------")
+    line()
     print(f"Name: {character_details["full_name"]}")
     print(f"HP: {character_details["hp"]}")
     print(f"Speed: {character_details["speed"]}")
     print("Attacks:")
     for attack in character_details["attacks"]:
-        print(f"- {attack["name"]}: attack {attack["ap"]} / can use {attack["pp"]} times")
+        print(f"- {attack["name"].upper()}: attack {attack["ap"]} / can use {attack["pp"]} times")
 
     confirm_character_answer = input("Do you want to use this character or not? (yes/no)")
 
@@ -250,25 +265,49 @@ while not selected_opponent:
         selected_opponent = True
 
 print(f"Your challenger is {opponent_character["name"]}. Get ready to fight!")
-print("============================")
+line()
 print(f"Beginning battle between {user_character["name"]} and {opponent_character["name"]}!")
-
+space()
 turns = 0
+
+# attacker is a dict
+# attack is a dict
+# defender is a dict
+def attack_turn(attacker, attack, defender):
+    attack_chance = random.randint(1, 100)
+    if attack_chance <= attack["accuracy"]:
+        print(f"{attacker["full_name"]} used {attack["name"].upper()}!")
+        print(f"{defender["full_name"]} lost {attack["ap"]} HP")
+        defender["hp"] -= attack["ap"]
+    else:
+        print(f"{attacker["full_name"]} used {attack["name"].upper()} but missed!")
+        print(f"{defender["full_name"]} was unharmed.")
+    attack["pp"] -= 1
+        
 
 while user_character["hp"] > 0 and opponent_character["hp"] > 0:
     turns += 1
     print(f"This is turn number #{turns}")
+
+    space()
+    print("Current HP standing:")
     print(f"{user_character["name"]} HP : {user_character["hp"]}")
     print(f"{opponent_character["name"]} HP : {opponent_character["hp"]}")
-
+    space_line()
     print("Which attack do you want to use?")
     for index, attack in enumerate(user_character["attacks"]):
         print(f"{index+1}. {attack["name"].upper()}")
         print(f"- Attack power: {attack["ap"]}")
         print(f"- Remaining usage: {attack["pp"]}")
         print(f"- Accuracy: {attack["accuracy"]}")
-    print("Enter the number")
-    attack_choice = int(input(""))-1
+
+    # TODO: Do PP work
+    # attack_choice = None
+    # while !attack_choice:
+    #     print("Enter the number of the attack")
+
+    #     if 
+    #     attack_choice = int(input(""))-1
 
     opponent_number_of_attacks = len(opponent_character["attacks"])
     opponent_attack_choice = random.randint(0, opponent_number_of_attacks - 1)
@@ -278,19 +317,14 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
     if user_character["speed"] >= opponent_character["speed"]:
         print("==============")
         print(" ")
-        print(f"{user_character["name"]} used {user_attack["name"].upper()}!")
-        print(f"{opponent_character["name"]} lost {user_attack["ap"]} HP")
-        print(" ")
-        opponent_character["hp"] -= user_attack["ap"]
-        user_attack["pp"] -= 1
+        attack_turn(user_character, user_attack, opponent_character)
 
         if opponent_character["hp"] <= 0:
             break
+        
+        print(" ")
 
-        print(f"{opponent_character["name"]} used {opponent_attack["name"].upper()}!")
-        print(f"{user_character["name"]} lost {opponent_attack["ap"]} HP")
-        user_character["hp"] -= opponent_attack["ap"]
-        opponent_attack["pp"] -= 1
+        attack_turn(opponent_character, opponent_attack, user_character)
         print(" ")
         print(" ")
         print("=============")
@@ -300,19 +334,14 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
     else:
         print("==============")
         print(" ")
-        print(f"{opponent_character["name"]} used {opponent_attack["name"].upper()}!")
-        print(f"{user_character["name"]} lost {opponent_attack["ap"]} HP")
-        user_character["hp"] -= opponent_attack["ap"]
-        opponent_attack["pp"] -= 1
+        attack_turn(opponent_character, opponent_attack, user_character)
 
+        print(" ")
         if user_character["hp"] <= 0:
             break
-        print(f"{user_character["name"]} used {user_attack["name"].upper()}!")
-        print(f"{opponent_character["name"]} lost {user_attack["ap"]} HP")
-        print(" ")
-        opponent_character["hp"] -= user_attack["ap"]
-        user_attack["pp"] -= 1
-        print(" ")
+
+        attack_turn(user_character, user_attack, opponent_character)
+
         print(" ")
         print("=============")
         if opponent_character["hp"] <= 0:
@@ -327,5 +356,4 @@ elif opponent_character["hp"] <= 0 :
 
     
 # TODO Next Week:
-# Random pick opponent
-# also add speed to determine who moves first.
+# DO PP work
