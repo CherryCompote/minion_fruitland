@@ -12,6 +12,12 @@ def space_line():
     line()
     space()
 
+def check_if_still_have_pp(attack_list):
+    for attack in attack_list:
+        if attack["pp"] > 0:
+            return True
+    return False
+
 print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
 list_of_warriors = [
@@ -104,13 +110,13 @@ list_of_warriors = [
         {
             "name": "toad attack",
             "ap": 10, #Attack power
-            "pp": 5, #How many times the player can use it
+            "pp": 1, #How many times the player can use it
             "accuracy": 95 #how likely it is to hit the enemy
         },
         {
             "name": "umbrella wack",
             "ap": 20,
-            "pp": 8,
+            "pp": 1,
             "accuracy": 75
         }
     ]
@@ -124,13 +130,13 @@ list_of_warriors = [
         {
             "name": "metal backpack",
             "ap": 15, #Attack power
-            "pp": 5, #How many times the player can use it
+            "pp": 10, #How many times the player can use it
             "accuracy": 85 #how likely it is to hit the enemy
         },
         {
             "name": "id swing",
             "ap": 5,
-            "pp": 15,
+            "pp": 10,
             "accuracy": 90
         }
     ]
@@ -183,7 +189,7 @@ list_of_warriors = [
     "attacks": [
         {
             "name": "avada kedavra",
-            "ap": 30, #Attack power
+            "ap": 40, #Attack power
             "pp": 1, #How many times the player can use it
             "accuracy": 95 #how likely it is to hit the enemy
         },
@@ -285,7 +291,17 @@ def attack_turn(attacker, attack, defender):
     attack["pp"] -= 1
         
 
+user_character_out_of_pp = False
+opponent_character_out_of_pp = False
+
 while user_character["hp"] > 0 and opponent_character["hp"] > 0:
+    if not check_if_still_have_pp(user_character["attacks"]):
+        user_character_out_of_pp = True
+        break
+    if not check_if_still_have_pp(opponent_character["attacks"]):
+        opponent_character_out_of_pp = True
+        break
+
     turns += 1
     print(f"This is turn number #{turns}")
 
@@ -300,23 +316,33 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
         print(f"- Attack power: {attack["ap"]}")
         print(f"- Remaining usage: {attack["pp"]}")
         print(f"- Accuracy: {attack["accuracy"]}")
+    space()
 
-    # TODO: Do PP work
-    # attack_choice = None
-    # while !attack_choice:
-    #     print("Enter the number of the attack")
-
-    #     if 
-    #     attack_choice = int(input(""))-1
+    attack_choice = None
+    while attack_choice == None:
+        print("Enter the number of the attack")
+        attack_selection_index = int(input(""))-1
+        user_attacks = user_character["attacks"]
+        attack_selection = user_attacks[attack_selection_index]
+        if attack_selection["pp"] <= 0:
+            print("The attack that you chose is not usable anymore.")
+        else:
+            attack_choice = attack_selection_index
 
     opponent_number_of_attacks = len(opponent_character["attacks"])
-    opponent_attack_choice = random.randint(0, opponent_number_of_attacks - 1)
+    opponent_attack_choice = None
+    while opponent_attack_choice == None:
+        opponent_attack_selection_index = random.randint(0, opponent_number_of_attacks - 1)
+        opponent_attacks = opponent_character["attacks"]
+        opponent_attack_selection = opponent_attacks[opponent_attack_selection_index]
+        if opponent_attack_selection["pp"] > 0:
+            opponent_attack_choice = opponent_attack_selection_index
 
     user_attack = user_character["attacks"][attack_choice]
     opponent_attack = opponent_character["attacks"][opponent_attack_choice]
     if user_character["speed"] >= opponent_character["speed"]:
-        print("==============")
-        print(" ")
+        line()
+        space()
         attack_turn(user_character, user_attack, opponent_character)
 
         if opponent_character["hp"] <= 0:
@@ -325,35 +351,33 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
         print(" ")
 
         attack_turn(opponent_character, opponent_attack, user_character)
-        print(" ")
-        print(" ")
-        print("=============")
+        space()
+        space_line()
 
         if user_character["hp"] <= 0:
             break
     else:
-        print("==============")
-        print(" ")
+        line()
         attack_turn(opponent_character, opponent_attack, user_character)
 
-        print(" ")
+        space()
         if user_character["hp"] <= 0:
             break
 
         attack_turn(user_character, user_attack, opponent_character)
 
-        print(" ")
-        print("=============")
+        space_line()
         if opponent_character["hp"] <= 0:
             break
 
 
 
 if user_character["hp"] <= 0 :
-    print(f"Uh oh, {user_character["name"]} lost... You can always try again.")
+    print(f"Uh oh, {user_character["name"]} got defeated... You can always try again.")
 elif opponent_character["hp"] <= 0 :
     print(f"Yay, You win! You defeated {opponent_character["name"]}!")
 
-    
-# TODO Next Week:
-# DO PP work
+if user_character_out_of_pp:
+    print(f"Oh no, all of {user_character["name"]}'s attacks aren't usable... You can always try again.")
+if opponent_character_out_of_pp:
+    print(f"Yay, you win! {opponent_character["name"]} ran out of attacks!")
