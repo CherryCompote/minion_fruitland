@@ -1,16 +1,98 @@
 import random
-from warriors import full_list_of_warriors
-from formatting import space, line, space_line
 
+poison_type = "POISON"
+sleep_type = "SLEEP"
+
+def space():
+    print(" ")
+
+def line():
+    print("===============================================================")
+
+def space_line():
+    space()
+    line()
+    space()
+
+# returns boolean
 def check_if_still_have_pp(attack_list):
     for attack in attack_list:
         if attack["pp"] > 0:
             return True
     return False
 
+# return boolean
+def check_if_character_can_wake_up(character):
+    if character["sleep_effect"]:
+        wake_up_probability = character["sleep_effect"]["wake_up_probability"]
+        wake_up_chance = random.randint(1, 100)
+        if wake_up_chance <= wake_up_probability:
+            return True
+        else:
+            return False
+    return True
+
 print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
-list_of_warriors = full_list_of_warriors
+list_of_warriors = [
+    {
+    "name": "George",
+    "full_name": "George",
+    "speed": 90,
+    "hp": 90, #Health points
+    "attacks": [
+        {
+            "name": "avada kedavra",
+            "ap": 40, #Attack power
+            "pp": 1, #How many times the player can use it
+            "accuracy": 95 #how likely it is to hit the enemy
+        },
+        {
+            "name": "stupefy",
+            "ap": 10,
+            "pp": 10,
+            "accuracy": 80
+        },
+        {
+            "name": "sleeping spell",
+            "ap": 0,
+            "pp": 5,
+            "accuracy": 100,
+            "effect": {
+                "type": sleep_type,
+                "probability": 85,
+                "wake_up_probability": 40
+            }
+        }
+    ]
+    },
+    {
+    "name": "Enoch",
+    "full_name": "Enoch",
+    "speed": 80,
+    "hp": 120, #Health points
+    "attacks": [
+        {
+            "name": "sandstorm",
+            "ap": 15, #Attack power
+            "pp": 5, #How many times the player can use it
+            "accuracy": 90 #how likely it is to hit the enemy
+        },
+        {
+            "name": "poison dart",
+            "ap": 5,
+            "pp": 5,
+            "accuracy": 100,
+            "effect": {
+                "type": poison_type,
+                "probability": 80
+                "damage_upper": 5
+                "damage_lower": 1
+            }
+        }
+    ]
+    }
+]
 
 selected_character = False
 user_character = {}
@@ -99,6 +181,7 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
     print(f"{user_character["name"]} HP : {user_character["hp"]}")
     print(f"{opponent_character["name"]} HP : {opponent_character["hp"]}")
     space_line()
+    
     print("Which attack do you want to use?")
     for index, attack in enumerate(user_character["attacks"]):
         print(f"{index+1}. {attack["name"].upper()}")
@@ -129,9 +212,21 @@ while user_character["hp"] > 0 and opponent_character["hp"] > 0:
 
     user_attack = user_character["attacks"][attack_choice]
     opponent_attack = opponent_character["attacks"][opponent_attack_choice]
+
+    user_character["sleep_effect"] = {
+        "type": sleep_type,
+        "probability": 5,
+        "wake_up_probability": 70
+    }
+
     if user_character["speed"] >= opponent_character["speed"]:
         line()
         space()
+
+
+
+
+
         attack_turn(user_character, user_attack, opponent_character)
 
         if opponent_character["hp"] <= 0:
