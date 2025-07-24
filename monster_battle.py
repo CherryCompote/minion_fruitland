@@ -2,13 +2,6 @@ import random
 from warriors import full_list_of_warriors
 from formatting import space, line, space_line
 
-def check_if_still_have_pp(attack_list):
-    for attack in attack_list:
-        if attack["pp"] > 0:
-            return True
-    return False
-
-print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
 list_of_warriors = full_list_of_warriors
 
@@ -64,21 +57,6 @@ line()
 print(f"Beginning battle between {user_character["name"]} and {opponent_character["name"]}!")
 space()
 turns = 0
-
-# attacker is a dict
-# attack is a dict
-# defender is a dict
-def attack_turn(attacker, attack, defender):
-    attack_chance = random.randint(1, 100)
-    if attack_chance <= attack["accuracy"]:
-        print(f"{attacker["full_name"]} used {attack["name"].upper()}!")
-        print(f"{defender["full_name"]} lost {attack["ap"]} HP")
-        defender["hp"] -= attack["ap"]
-    else:
-        print(f"{attacker["full_name"]} used {attack["name"].upper()} but missed!")
-        print(f"{defender["full_name"]} was unharmed.")
-    attack["pp"] -= 1
-        
 
 user_character_out_of_pp = False
 opponent_character_out_of_pp = False

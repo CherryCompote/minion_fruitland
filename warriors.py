@@ -1,3 +1,5 @@
+from monster_battle_types import sleep_type, poison_type
+
 full_list_of_warriors = [
     {
     "name": "Gru",
@@ -216,6 +218,66 @@ full_list_of_warriors = [
             "ap": 10,
             "pp": 10,
             "accuracy": 85
+        }
+    ]
+    }
+]
+
+demo_list_of_warriors = [
+    {
+    "name": "George",
+    "full_name": "George",
+    "speed": 90,
+    "hp": 90, #Health points
+    "attacks": [
+        {
+            "name": "avada kedavra",
+            "ap": 40, #Attack power
+            "pp": 1, #How many times the player can use it
+            "accuracy": 95 #how likely it is to hit the enemy
+        },
+        {
+            "name": "stupefy",
+            "ap": 10,
+            "pp": 10,
+            "accuracy": 80
+        },
+        {
+            "name": "sleeping spell",
+            "ap": 0,
+            "pp": 5,
+            "accuracy": 100,
+            "effect": {
+                "type": sleep_type,
+                "probability": 85,
+                "wake_up_probability": 40
+            }
+        }
+    ]
+    },
+    {
+    "name": "Enoch",
+    "full_name": "Enoch",
+    "speed": 80,
+    "hp": 120, #Health points
+    "attacks": [
+        {
+            "name": "sandstorm",
+            "ap": 15, #Attack power
+            "pp": 5, #How many times the player can use it
+            "accuracy": 90 #how likely it is to hit the enemy
+        },
+        {
+            "name": "poison dart",
+            "ap": 5,
+            "pp": 5,
+            "accuracy": 100,
+            "effect": {
+                "type": poison_type,
+                "probability": 80,
+                "damage_upper": 5,
+                "damage_lower": 1
+            }
         }
     ]
     }

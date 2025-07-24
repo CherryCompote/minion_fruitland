@@ -1,43 +1,50 @@
+from warriors import demo_list_of_warriors
 from test_objects import test_character, sleep_effect, poison_effect
 from battle_utils import check_if_character_can_wake_up
+from formatting import space, line, space_line
 
-def apply_effect(character, effect):
-    if "effected" in character:
-        effect_type = effect["type"]
-        already_has_same_effect = False
-        for effected_effect in character["effected"]:
-            if effect_type == effected_effect["type"]:
-                already_has_same_effect = True
+def select_user_character(list_of_warriors):
 
-        if not already_has_same_effect:
-            character["effected"].append(effect)
-    else:
-        # if charactyer has no effects, then we can definitely apply the effect
-        character["effected"] = [effect]
+    selected_character = False
+    user_character = {}
 
-new_test_character = test_character
+    while not selected_character: #also can type: while selected_character == False:
+        space_line()
+        print("Select your character! Type the character to see the details.")
+        space_line()
 
-print(new_test_character)
+        for warrior in list_of_warriors:
+            print(f"- {warrior ["full_name"]}")
+            space()
 
-apply_effect(new_test_character, sleep_effect)
+        character = input("Which character would you like to see the details of?")
 
-print(new_test_character)
+        character_details = {}
 
-apply_effect(new_test_character, poison_effect)
+        for warrior in list_of_warriors:
+            # Check if the user input is equal to either the name or full name
+            # comparing it to lowercase
+            if character.lower() == warrior["name"].lower() or character.lower() == warrior["full_name"].lower():
+                character_details = warrior
+        space()
+        print("Here's the character stats:")
+        line()
+        print(f"Name: {character_details["full_name"]}")
+        print(f"HP: {character_details["hp"]}")
+        print(f"Speed: {character_details["speed"]}")
+        print("Attacks:")
+        for attack in character_details["attacks"]:
+            print(f"- {attack["name"].upper()}: attack {attack["ap"]} / can use {attack["pp"]} times")
+        space()
+        confirm_character_answer = input("Do you want to use this character or not? (yes/no)")
 
-print(new_test_character)
+        if confirm_character_answer == "yes":
+            selected_character = True
+            user_character = character_details
+
+    return user_character
 
 
-apply_effect(new_test_character, sleep_effect)
 
-print(new_test_character)
-
-
-apply_effect(new_test_character, sleep_effect)
-
-print(new_test_character)
-
-
-apply_effect(new_test_character, sleep_effect)
-
-print(new_test_character)
+a = select_user_character(demo_list_of_warriors)
+print(a) 

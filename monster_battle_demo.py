@@ -1,37 +1,5 @@
 import random
 
-poison_type = "POISON"
-sleep_type = "SLEEP"
-
-def space():
-    print(" ")
-
-def line():
-    print("===============================================================")
-
-def space_line():
-    space()
-    line()
-    space()
-
-# returns boolean
-def check_if_still_have_pp(attack_list):
-    for attack in attack_list:
-        if attack["pp"] > 0:
-            return True
-    return False
-
-# return boolean
-def check_if_character_can_wake_up(character):
-    if character["sleep_effect"]:
-        wake_up_probability = character["sleep_effect"]["wake_up_probability"]
-        wake_up_chance = random.randint(1, 100)
-        if wake_up_chance <= wake_up_probability:
-            return True
-        else:
-            return False
-    return True
-
 print("Welcome to monster battle! In this game, you try to defeat other warriors!")
 
 list_of_warriors = [
