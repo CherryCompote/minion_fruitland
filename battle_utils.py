@@ -1,4 +1,4 @@
-
+import random
 from monster_battle_types import sleep_type, poison_type
 from formatting import space, line, space_line
 
@@ -46,13 +46,6 @@ def select_user_character(list_of_warriors):
 
     return user_character
 
-
-def check_if_still_have_pp(attack_list):
-    for attack in attack_list:
-        if attack["pp"] > 0:
-            return True
-    return False
-
 # attacker is a dict
 # attack is a dict
 # defender is a dict
@@ -93,3 +86,25 @@ def apply_effect(character, effect):
         # if charactyer has no effects, then we can definitely apply the effect
         character["effected"] = [effect]
 
+def select_opponent_character(list_of_warriors, selected_character):
+    selected_opponent = False
+    opponent_character = {}
+    while not selected_opponent:
+        opponent_character = random.choice(list_of_warriors)
+        if opponent_character["name"] != selected_character["name"]:
+            selected_opponent = True
+    return opponent_character
+
+def start_battle_description(user_character, opponent_character):
+    # HOMEWORK: Add a starting battle description
+    print("Your opponent is...")
+    line()
+    print(f"{opponent_character["full_name"]}!")
+    space()
+    print(f"Starting battle between {user_character["full_name"]} and {opponent_character["full_name"]}!")
+
+def check_remaining_pp(attack_list):
+    for attack in attack_list:
+        if attack["pp"] > 0:
+            return True
+    return False
