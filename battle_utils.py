@@ -96,7 +96,6 @@ def select_opponent_character(list_of_warriors, selected_character):
     return opponent_character
 
 def start_battle_description(user_character, opponent_character):
-    # HOMEWORK: Add a starting battle description
     print("Your opponent is...")
     line()
     print(f"{opponent_character["full_name"]}!")
@@ -108,3 +107,46 @@ def check_remaining_pp(attack_list):
         if attack["pp"] > 0:
             return True
     return False
+
+#deducting hp for the poison effect, takes in character name
+def apply_poison_damage(character):
+    if "effected" in character:
+        for effect in character["effected"]:
+            if effect["type"] == poison_type:
+                poison_damage = random.randint(effect["damage_lower"], effect["damage_upper"])
+                character["hp"] -= poison_damage
+                print(f"Uh oh, {character["name"]} lost {poison_damage} HP from the poison effect")
+
+def check_remaining_hp(character):
+    return character["hp"] > 0
+
+def select_attack(character):
+    print("Which attack do you want to use?")
+    for index, attack in enumerate(character["attacks"]):
+        print(f"{index+1}. {attack["name"].upper()}")
+        print(f"- Attack power: {attack["ap"]}")
+        print(f"- Remaining usage: {attack["pp"]}")
+        print(f"- Accuracy: {attack["accuracy"]}")
+    space()
+
+    attack_choice = None
+    while attack_choice == None:
+        print("Enter the number of the attack")
+        attack_selection_index = int(input(""))-1
+        character_attacks = character["attacks"]
+        attack_selection = character_attacks[attack_selection_index]
+        if attack_selection["pp"] <= 0:
+            print("The attack that you chose is not usable anymore.")
+        else:
+            attack_choice = attack_selection
+    return attack_choice
+
+def randomly_select_attack(character):
+    attack_choice = None
+    while attack_choice == None:
+        character_attacks = character["attacks"]
+        attack_selection_index = random.randint(0, len(character_attacks)-1)
+        attack_selection = character_attacks[attack_selection_index]
+        if attack_selection["pp"] > 0:
+            attack_choice = attack_selection
+    return attack_choice

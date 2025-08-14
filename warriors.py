@@ -282,3 +282,6 @@ demo_list_of_warriors = [
     ]
     }
 ]
+
+
+# if a character is poisoned or sleeping, they will have a "effected" key
